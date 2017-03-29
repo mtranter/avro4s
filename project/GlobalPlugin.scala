@@ -6,7 +6,7 @@ import com.typesafe.sbt.pgp.PgpKeys
 /** Adds common settings automatically to all subprojects */
 object GlobalPlugin extends AutoPlugin {
 
-  val org = "com.sksamuel.avro4s"
+  val org = "com.judopay.avro4s"
 
   val AvroVersion = "1.8.1"
   val Log4jVersion = "1.2.17"
@@ -41,34 +41,8 @@ object GlobalPlugin extends AutoPlugin {
     publishArtifact in Test := false,
     ReleasePlugin.autoImport.releasePublishArtifactsAction := PgpKeys.publishSigned.value,
     ReleasePlugin.autoImport.releaseCrossBuild := true,
-    publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (isSnapshot.value) {
-        Some("snapshots" at s"${nexus}content/repositories/snapshots")
-      } else {
-        Some("releases" at s"${nexus}service/local/staging/deploy/maven2")
-      }
-    },
-    pomExtra := {
-      <url>https://github.com/sksamuel/avro4s</url>
-        <licenses>
-          <license>
-            <name>MIT</name>
-            <url>https://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-          </license>
-        </licenses>
-        <scm>
-          <url>git@github.com:sksamuel/avro4s.git</url>
-          <connection>scm:git@github.com:sksamuel/avro4s.git</connection>
-        </scm>
-        <developers>
-          <developer>
-            <id>sksamuel</id>
-            <name>sksamuel</name>
-            <url>http://github.com/sksamuel</url>
-          </developer>
-        </developers>
-    }
+    publishTo := Some("Artifactory Realm" at "http://192.168.43.183:8081/artifactory/libs-snapshot-local/"),
+    credentials += Credentials("Artifactory Realm", "192.168.43.183", "admin", "password")
+
   )
 }
