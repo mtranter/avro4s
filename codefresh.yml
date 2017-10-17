@@ -8,4 +8,4 @@ steps:
       - AWS_ACCESS_KEY_ID=${{AWS_ACCESS_KEY_ID}}
       - AWS_SECRET_ACCESS_KEY=${{AWS_SECRET_ACCESS_KEY}}
     commands:
-      - sbt ';set version := "1.6.4.${{CF_BUILD_ID}}-SNAPSHOT";set awsProfile := None;compile;test;publish'
+      - sbt ';set version := "1.6.4.${{CF_BUILD_ID}}-SNAPSHOT";compile;test;publish'
