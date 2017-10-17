@@ -2,6 +2,7 @@ import sbt._
 import sbt.Keys._
 import sbtrelease.ReleasePlugin
 import com.typesafe.sbt.pgp.PgpKeys
+import ohnosequences.sbt.SbtS3Resolver.autoImport.{awsProfile, s3, s3resolver}
 
 /** Adds common settings automatically to all subprojects */
 object GlobalPlugin extends AutoPlugin {
@@ -36,13 +37,17 @@ object GlobalPlugin extends AutoPlugin {
     )
   )
 
+  awsProfile := "maven"
+
   val publishingSettings = Seq(
     publishMavenStyle := true,
     publishArtifact in Test := false,
     ReleasePlugin.autoImport.releasePublishArtifactsAction := PgpKeys.publishSigned.value,
     ReleasePlugin.autoImport.releaseCrossBuild := true,
-    publishTo := Some("Artifactory Realm" at "http://192.168.43.183:8081/artifactory/libs-snapshot-local/"),
-    credentials += Credentials("Artifactory Realm", "192.168.43.183", "admin", "password")
+    publishTo := {
+      val prefix = if (isSnapshot.value) "snapshots" else "releases"
+      Some(s3resolver.value("Judo "+prefix+" S3 bucket", s3(s"judo-maven-repo-public.s3.amazonaws.com/${prefix}")) withMavenPatterns)
+    }
 
   )
 }

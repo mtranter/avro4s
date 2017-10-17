@@ -1,0 +1,8 @@
+version: '1.0'
+steps:
+  build_test_publish:
+    image: hseeberger/scala-sbt:8u141-jdk_2.12.3_0.13.16
+    working_directory: ${{main_clone}}
+    description: Build and deploy
+    commands:
+      - sbt ';set version := "1.6.4.${{CF_BUILD_ID}}-SNAPSHOT";compile;test;publish'
