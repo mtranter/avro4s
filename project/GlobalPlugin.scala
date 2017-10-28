@@ -37,8 +37,6 @@ object GlobalPlugin extends AutoPlugin {
     )
   )
 
-  awsProfile := "maven"
-
   val publishingSettings = Seq(
     publishMavenStyle := true,
     publishArtifact in Test := false,
