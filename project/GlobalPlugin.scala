@@ -44,7 +44,7 @@ object GlobalPlugin extends AutoPlugin {
     ReleasePlugin.autoImport.releaseCrossBuild := true,
     publishTo := {
       val prefix = if (isSnapshot.value) "snapshots" else "releases"
-      Some(s3resolver.value("Judo "+prefix+" S3 bucket", s3(s"judo-maven-repo-public.s3.amazonaws.com/${prefix}")) withMavenPatterns)
+      Some(s3resolver.value("Judo "+prefix+" S3 bucket", s3(s"judo-maven-repo-public/${prefix}")) withMavenPatterns)
     }
 
   )
