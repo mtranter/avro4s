@@ -10,4 +10,7 @@ steps:
       - AWS_REGION=${{AWS_REGION}}
     commands:
       - echo "Key $AWS_ACCESS_KEY_ID, Secret $AWS_SECRET_ACCESS_KEY"
-      - sbt ';set version := "1.6.4.${{CF_BUILD_ID}}-SNAPSHOT";compile;test;publish'
+      - sbt ";set version in \"avro4s-core\" := \"1.6.4.${{CF_BUILD_ID}}-SNAPSHOT\" \
+          ;set version in \"avro4s-json\" := \"1.6.4.${{CF_BUILD_ID}}-SNAPSHOT\" \
+          ;set version in \"avro4s-macros\" := \"1.6.4.${{CF_BUILD_ID}}-SNAPSHOT\" \
+          ;compile;test;publish"
