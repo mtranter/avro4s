@@ -129,10 +129,8 @@ object FromValue extends LowPriorityFromValue {
     val tpe = implicitly[WeakTypeTag[T]].tpe
     val from = implicitly[FromValue[T]]
 
-    def typeName: String = {
-      val nearestPackage = Stream.iterate(tpe.typeSymbol.owner)(_.owner).dropWhile(!_.isPackage).head
-      s"${nearestPackage.fullName}.${tpe.typeSymbol.name}"
-    }
+    val typeName = s"${tpe.typeSymbol.name}"
+
 
     value match {
       case utf8: Utf8 if tpe <:< typeOf[java.lang.String] => Some(from(value))
@@ -155,7 +153,7 @@ object FromValue extends LowPriorityFromValue {
         if tpe <:< typeOf[java.util.Map[_, _]] ||
           tpe <:< typeOf[Map[_, _]] =>
         Some(from(value))
-      case record: GenericData.Record if typeName == record.getSchema.getFullName => Some(from(value))
+      case record: GenericData.Record if record.getSchema.getFullName.endsWith(typeName) => Some(from(value))
       case _ => None
     }
   }
